@@ -99,6 +99,7 @@
          (map render-post cids)))))
 
 (render-post 77)
+;renders good nested structure for the comments
 
 (defn render-post [pid]
   (let [post (first (filter #(= pid (:id %)) @posts))
