@@ -77,6 +77,16 @@
                     :author "fool@nonforum.com"
                     :comments []}]))
 
+(def posts-sleek (atom {77 {:id 77, :contents "Seventy seven is the nicest number below one hundred", :author "nonforum@nonforum.com", :comments [33 53]}, 33 {:id 33, :contents "Thirty three is awesome.", :author "monforum@nonforum.com", :comments [34 35]}, 34 {:id 34, :contents "fusion is coming soon to a powergrid near you.", :author "non@nonforum.com", :comments [37]}, 37 {:id 37, :contents "hello there to the galaxy", :author "x@nonforum.com", :comments []}, 53 {:id 53, :contents "relax , don't do it.", :author "fool@nonforum.com", :comments []}}))
+
+;create painless index from that
+(defn idx-by-id [id-key coll]
+  (into {}
+        (map (fn [{id id-key :as item}]
+               [id item]))
+        coll))
+
+(idx-by-id :id @posts)
 
 
 (:comments (first (filter  #(= 33 (:id %)) @posts)))
@@ -86,28 +96,46 @@
     cids))
 
 (defn render-post [pid]
-  (let [cids (return-comment-ids pid)]
+  (let [posts @posts
+        cids (return-comment-ids pid)]
     (prn cids)
     (if (empty? (return-comment-ids pid))
-      (let [noc-post (first (filter #(= pid (:id %)) @posts))]
+      (let [noc-post (first (filter #(= pid (:id %)) posts))]
         (println (:contents noc-post))
         (println (:author noc-post)))
-       (let [com-post (first (filter #(= pid (:id %)) @posts))]
+       (let [com-post (first (filter #(= pid (:id %)) posts))]
+         (println (:contents com-post))
+         (println (:author com-post))
+         (println "comments >")
+         (map render-post cids)))))
+(render-post 77)
+;renders good nested structure for the comments
+
+
+(defn render-posts-sleek [pid]
+  (let [posts @posts-sleek
+        cids (return-comment-ids pid)]
+    (prn cids)
+    (if (empty? (return-comment-ids pid))
+      (let [noc-post (first (get posts pid))]
+        (println (:contents noc-post))
+        (println (:author noc-post)))
+       (let [com-post (first (get posts pid))]
          (println (:contents com-post))
          (println (:author com-post))
          (println "comments >")
          (map render-post cids)))))
 
-(render-post 77)
-;renders good nested structure for the comments
 
-(defn render-post [pid]
-  (let [post (first (filter #(= pid (:id %)) @posts))
-        contents (:contents post)
-        author (:author post)
-        comments (:comments post)]
+(render-posts-sleek 77)
 
-    (str comments " " author " " contents)))
+;(defn render-post [pid]
+;  (let [post (first (filter #(= pid (:id %)) @posts))
+;        contents (:contents post)
+;        author (:author post)
+;        comments (:comments post)];;;;
+;
+;    (str comments " " author " " contents)))
 
 (render-post 33)
 
@@ -120,6 +148,35 @@
 
 
  (filter  #(= 33 (:id %)) @posts)
+
+
+
+
+ (rum/defc render-item [pid]
+  (let [posts @posts-sleek
+        cids (return-comment-ids pid)]
+    (prn cids)
+    (if (empty? (return-comment-ids pid))
+      (let [noc-post (get posts pid)]
+        [:div.nocomments
+         [:div#pid
+          [:div.item-contents (:contents noc-post)]
+          [:div.item-author   (:author noc-post)]]]))
+       ;lest the post has comments and needs more renders in pocket.
+       (let [com-post (get posts pid)]
+         [:div.hascomments.padleft
+          [:div#pid
+           [:div.item-contents  (:contents com-post)]
+           [:div.item-author (:author com-post)]
+           (map render-item cids)]])))
+
+
+
+
+
+
+
+
 
 
 (rum/defc comment-parent [id]
@@ -281,14 +338,14 @@
                    :this-id 5353
                    :child-id 225}]}))
 
-(def posts [{:title "What up Wisconsin!"
-             :content ""
-             :comments [{:cid 758373
-                        :content "How you doing?"
-                        :comments [{:cid 87583
-                                   :content "Excellent!"
-                                   :comments [{:cid 8787
-                                              :content "Excelsior!"}]}]}]}])
+;(def posts [{:title "What up Wisconsin!"
+;             :content ""
+;             :comments [{:cid 758373
+;                        :content "How you doing?"
+;                        :comments [{:cid 87583
+;                                   :content "Excellent!"
+;                                   :comments [{:cid 8787
+;                                              :content "Excelsior!"}]}]}]}]);
 
 (defn hax [m]
   (for [[title contents comments] m]
@@ -340,6 +397,9 @@
    (login-bar)
    (television)
    (hello-world)])
+
+(rum/mount (render-item 77)
+           (. js/document (getElementById "thread")))
 
 (rum/mount (start)
            (. js/document (getElementById "start")))

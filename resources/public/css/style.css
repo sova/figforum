@@ -12,7 +12,15 @@
 }
 
 .padleft {
-  padding-left: +10px;
+  padding-left: +25px;
+}
+
+.nocomments {
+  border: 1px solid blue;
+}
+
+.hascomments {
+  border: 1px solid green;
 }
 
 .fbfb {
