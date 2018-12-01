@@ -89,67 +89,10 @@
 (idx-by-id :id @posts)
 
 
-(:comments (first (filter  #(= 33 (:id %)) @posts)))
 
 (defn return-comment-ids [post-id]
   (let [cids (:comments (first (filter  #(= post-id (:id %)) @posts)))]
     cids))
-
-(defn render-post [pid]
-  (let [posts @posts
-        cids (return-comment-ids pid)]
-    (prn cids)
-    (if (empty? (return-comment-ids pid))
-      (let [noc-post (first (filter #(= pid (:id %)) posts))]
-        (println (:contents noc-post))
-        (println (:author noc-post)))
-       (let [com-post (first (filter #(= pid (:id %)) posts))]
-         (println (:contents com-post))
-         (println (:author com-post))
-         (println "comments >")
-         (map render-post cids)))))
-(render-post 77)
-;renders good nested structure for the comments
-
-
-(defn render-posts-sleek [pid]
-  (let [posts @posts-sleek
-        cids (return-comment-ids pid)]
-    (prn cids)
-    (if (empty? (return-comment-ids pid))
-      (let [noc-post (first (get posts pid))]
-        (println (:contents noc-post))
-        (println (:author noc-post)))
-       (let [com-post (first (get posts pid))]
-         (println (:contents com-post))
-         (println (:author com-post))
-         (println "comments >")
-         (map render-post cids)))))
-
-
-(render-posts-sleek 77)
-
-;(defn render-post [pid]
-;  (let [post (first (filter #(= pid (:id %)) @posts))
-;        contents (:contents post)
-;        author (:author post)
-;        comments (:comments post)];;;;
-;
-;    (str comments " " author " " contents)))
-
-(render-post 33)
-
-(return-comment-ids 33)
-(mapcat return-comment-ids (return-comment-ids 33))
-
-(return-comment-ids 77)
-
-(return-comment-ids 34)
-
-
- (filter  #(= 33 (:id %)) @posts)
-
-
 
 
  (rum/defc render-item [pid]
@@ -177,11 +120,6 @@
 
 
 
-
-
-(rum/defc comment-parent [id]
-  (filter (fn [sid]
-            (= sid id)) @posts))
 
 (rum/defc fb-sdk [app-id]
   [:script {:type "text/javascript"}
@@ -211,7 +149,7 @@
 (rum/defc hello-world []
   [:div
    [:h1 (:text @app-state)]
-   [:h3 "Edit this and watch it change!"]
+   [:h3 "Edit this and watch it change fairly soon!"]
    [:h4 "Nonforum lives again!"]])
 
 (rum/defc top-bar []
