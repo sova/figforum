@@ -75,7 +75,7 @@
                    {:id 53
                     :contents "relax , don't do it."
                     :author "fool@nonforum.com"
-                    :comments [88]}
+                    :comments [88 7777]}
                    {:id 69
                     :contents "the extraordinary world of bugs is glorious."
                     :author "fx@nonforum.com"
@@ -103,8 +103,8 @@
     cids))
 
 
- (rum/defc render-item [pid]
-  (let [posts @posts-sleek
+ (rum/defc render-item < rum/reactive [pid]
+  (let [posts  (rum/react posts-sleek) ;atom
         cids (return-comment-ids pid)]
     (prn cids)
     (if (empty? (return-comment-ids pid))
@@ -221,24 +221,12 @@
                                    ;submit to server here!
 
                                     (let [new-post-map {:title (get-in @input-state [:inputs 0 :title])
-                                                                                 :contents (get-in @input-state [:inputs 0 :contents])
-                                                                                 :priority 10
-                                                                                 :posted-by "x@nonforum.com"
+                                                        :contents (get-in @input-state [:inputs 0 :contents])
+                                                        :priority 10
+                                                        :posted-by "x@nonforum.com"
 
-                                                                                 :timestamp 80008
-                                                                                 :parent nil}]
-                                    ;   (POST "/send-message"
-                                     ;   {:body {:title (:title new-post-map)
-                                      ;            :posted-by "x@nonforum.com"
-                                       ;           :timestamp 80008
-                                        ;          :parent nil
-                                   ;               :priority 11
-                                    ;              :contents (:contents new-post-map)
-                                     ;             :handler message-sent-boomerang
-                                      ;            :error-handler err0r }
-                                       ;  :headers {"x-csrf-token" (.-value (.getElementById js/document "aft"))}
-                                       ;;  })
-                                       ;(.log js/console (.-value (.getElementById js/document "aft"))) ;new-post-map)
+                                                        :timestamp 80008
+                                                        :parent nil}]
 
                                        (swap! tv-state update :tiles conj new-post-map))) ;thanks @Marc O'Morain
                        } "post new"]])
@@ -255,7 +243,20 @@
                                               (swap! input-state assoc-in [:inputs 0 :comment] (.-value (.-target e)))
                                               (.log js/console (get-in @input-state [:inputs 0 :comment]))))
                          }]
-   [:button.fullwidth {:type "submit"} "post comment"]])
+   [:button.fullwidth {:type "button"
+                       :on-click (fn [e]
+                                   (let [new-comment-map {:id 7777
+                                                          :contents (get-in @input-state [:inputs 0 :comment])
+                                                          :posted-by "zed@nonforum.com"}]
+                                     (swap! posts conj new-comment-map)
+                                     (reset! posts-sleek (idx-by-id :id @posts))
+                                     (.log js/console new-comment-map)
+                                     (.log js/console "comment added.")
+
+                                     ;also need to update "child" ness of parent comment
+                                     ;(swap! posts update "33" [:comments] conj (:id new-comment-map))
+                                     ;how to update ?
+                                     ))} "post comment"]])
 
 
 
