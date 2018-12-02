@@ -25,6 +25,11 @@
   border-width: 0 15px 0px 0px;
 }
 
+.selectedParent {
+  background-color: orange;
+  border: 1px solid red;
+}
+
 .fbfb {
   background-color: lightblue;
 }

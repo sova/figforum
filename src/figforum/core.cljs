@@ -50,6 +50,7 @@
                        [ {:title ""
                           :contents ""
                           :comment "ur coment"
+                          :selected-parent 77
                           }]}))
 
 (defn js-reload []
@@ -112,19 +113,20 @@
         (prn "haaaaa")
         [:div.nocomments
          [:div#pid
-          [:div.item-contents (:contents noc-post)]
-          [:div.item-author   (:author noc-post)]]]))
+          [:div.item-contents {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents noc-post)]
+          [:div.item-author   (:author noc-post)]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
          (prn "waaaaa")
          [:div.hascomments.padleft
           [:div#pid
-           [:div.item-contents  (:contents com-post)]
+           [:div.item-contents  {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents com-post)]
            [:div.item-author (:author com-post)]
-           (map render-item cids)]])))
+           (map render-item cids)]]))))
 
 
-
+(get-in @input-state [:inputs 0 :selected-parent])
+(if (= 77 (get-in @input-state [:inputs 0 :selected-parent])) "hey")
 
 
 (swap! posts conj {:id 999
@@ -249,7 +251,7 @@
                          }]
    [:button.fullwidth {:type "button"
                        :on-click (fn [e]
-                                   (let [ parent-id 53
+                                   (let [ parent-id (get-in @input-state [:inputs 0 :selected-parent])
                                           new-comment-map {:id 888
                                                           :contents (get-in @input-state [:inputs 0 :comment])
                                                           :author "zededeed@nonforum.com"
