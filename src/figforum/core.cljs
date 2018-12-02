@@ -254,11 +254,12 @@
                                                           :contents (get-in @input-state [:inputs 0 :comment])
                                                           :author "zededeed@nonforum.com"
                                                           :comments []}]
-                                     (swap! posts conj new-comment-map)
-                                     ;(swap! posts update-in
-                                     ;(reset! posts-sleek (idx-by-id :id @posts))
-                                     ;(swap! posts-sleek update-in [parent-id :comments] conj (:id new-comment-map))
-                                     ;(prn @posts-sleek);add this id as a child element of the parent in the atom
+
+                                      (let [first-hit (->> @posts
+                                                          (keep-indexed #(when (= (:id %2) parent-id) %1))
+                                                           first)]
+                                        (swap! posts conj new-comment-map) ;add new comment
+                                        (swap! posts update-in [first-hit :comments] conj (:id new-comment-map))) ;add comment id to parent
 
                                      ;(.log js/console @posts-sleek)
                                      ;(.log js/console new-comment-map)
