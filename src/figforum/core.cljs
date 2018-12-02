@@ -155,12 +155,6 @@
 (rum/defc link [address]
   [:a {:href address} address])
 
-(rum/defc hello-world []
-  [:div
-   [:h1 (:text @app-state)]
-   [:h3 "Edit this and watch it change fairly soon!"]
-   [:h4 "Nonforum lives again!"]])
-
 (rum/defc top-bar []
   [:div#topbar
    [:ol.topbar
@@ -279,8 +273,7 @@
    (top-bar)
    (side-bar)
    (login-bar)
-   (television)
-   (hello-world)])
+   (television)])
 
 (rum/mount (render-item 69)
            (. js/document (getElementById "thread")))

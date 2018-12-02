@@ -12,12 +12,12 @@
 }
 
 .padleft {
-  padding-left: +25px;
+  padding-left: +35px;
 }
 
 .nocomments {
   border: 1px solid blue;
-  border-width: 1 0 0 1px;
+  border-width: 0 0 0 0px;
 }
 
 .hascomments {
@@ -27,7 +27,7 @@
 
 .selectedParent {
   background-color: orange;
-  border: 1px solid red;
+  border: 0px solid red;
 }
 
 .fbfb {
