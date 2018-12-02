@@ -18,6 +18,7 @@
 .nocomments {
   border: 1px solid blue;
   border-width: 0 0 0 0px;
+  padding-bottom: 3px;
 }
 
 .hascomments {
