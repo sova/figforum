@@ -106,22 +106,29 @@
 
  (rum/defc render-item < rum/reactive [pid]
   (let [post-coll  (rum/react posts) ;atom
+        input-coll (rum/react input-state)
         cids (return-comment-ids pid)]
     (prn cids)
     (if (empty? (return-comment-ids pid))
       (let [noc-post  (first (filter  #(= pid (:id %)) post-coll))]
         (prn "haaaaa")
         [:div.nocomments
-         [:div#pid
-          [:div.item-contents {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents noc-post)]
-          [:div.item-author   (:author noc-post)]]])
+         [:div#pid {:on-click (fn [e] (do
+                                         (.log js/console pid)
+                                         (.stopPropagation e)
+                                         (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}
+          [:div.item-contents {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents noc-post)
+            [:div.item-author   (:author noc-post)]]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
          (prn "waaaaa")
          [:div.hascomments.padleft
-          [:div#pid
-           [:div.item-contents  {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents com-post)]
-           [:div.item-author (:author com-post)]
+          [:div#pid {:on-click (fn [e] (do
+                                         (.log js/console pid)
+                                         (.stopPropagation e)
+                                         (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}
+           [:div.item-contents  {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents com-post)
+             [:div.item-author (:author com-post)]]
            (map render-item cids)]]))))
 
 
