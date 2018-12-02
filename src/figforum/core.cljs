@@ -112,7 +112,7 @@
     (if (empty? (return-comment-ids pid))
       (let [noc-post  (first (filter  #(= pid (:id %)) post-coll))]
         [:div.nocomments
-         [:div#pid {:on-click (fn [e] (do
+         [:div#pid.padleft {:on-click (fn [e] (do
                                          (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
                                          (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}
@@ -120,8 +120,8 @@
             [:div.item-author   (:author noc-post)]]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
-         [:div.hascomments.padleft
-          [:div#pid {:on-click (fn [e] (do
+         [:div.hascomments
+          [:div#pid.padleft {:on-click (fn [e] (do
                                          (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
                                          (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}

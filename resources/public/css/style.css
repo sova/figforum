@@ -48,10 +48,16 @@
   border: 1px solid blue;
 }
 
+#inputs {
+  display: block;
+  padding-bottom: 200px;
+}
 #postinput {
   border: 1px solid orange;
+  display: block;
 }
 
 #postcommentinput {
+  display: block;
   border: 1px solid lightblue;
 }
