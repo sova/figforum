@@ -75,11 +75,19 @@
                    {:id 53
                     :contents "relax , don't do it."
                     :author "fool@nonforum.com"
-                    :comments []}]))
+                    :comments [88]}
+                   {:id 69
+                    :contents "the extraordinary world of bugs is glorious."
+                    :author "fx@nonforum.com"
+                    :comments [77]}]))
 
-(def posts-sleek (atom {77 {:id 77, :contents "Seventy seven is the nicest number below one hundred", :author "nonforum@nonforum.com", :comments [33 53]}, 33 {:id 33, :contents "Thirty three is awesome.", :author "monforum@nonforum.com", :comments [34 35]}, 34 {:id 34, :contents "fusion is coming soon to a powergrid near you.", :author "non@nonforum.com", :comments [37]}, 37 {:id 37, :contents "hello there to the galaxy", :author "x@nonforum.com", :comments []}, 53 {:id 53, :contents "relax , don't do it.", :author "fool@nonforum.com", :comments []}}))
+(swap! posts conj {:id 88
+                   :contents "fortunate are the African penguins"
+                   :author "vv@nonforum.com"
+                   :comments [22]})
 
-;create painless index from that
+(def posts-sleek (atom {77 {:id 77, :contents "Seventy seven is the nicest number below one hundred", :author "nonforum@nonforum.com", :comments [33 53]}, 33 {:id 33, :contents "Thirty three is awesome.", :author "monforum@nonforum.com", :comments [34 35]}, 34 {:id 34, :contents "fusion is coming soon to a powergrid near you.", :author "non@nonforum.com", :comments [37]}, 37 {:id 37, :contents "hello there to the galaxy", :author "x@nonforum.com", :comments []}, 53 {:id 53, :contents "relax , don't do it.", :author "fool@nonforum.com", :comments [88]}, 69 {:id 69, :contents "the extraordinary world of bugs is glorious.", :author "fx@nonforum.com", :comments [77]}, 88 {:id 88, :contents "fortunate are the African penguins", :author "vv@nonforum.com", :comments [22]}, nil {:author "y@nonforum.com", :contents "hail yourself, poseidonnn", :comments [77 78]}}))
+                   ;create painless index from that
 (defn idx-by-id [id-key coll]
   (into {}
         (map (fn [{id id-key :as item}]
@@ -116,7 +124,11 @@
 
 
 
+(swap! posts conj {:author "y@nonforum.com"
+                   :contents "hail yourself, poseidonnn"
+                   :comments [77 78]})
 
+(idx-by-id :id @posts)
 
 
 
@@ -212,6 +224,7 @@
                                                                                  :contents (get-in @input-state [:inputs 0 :contents])
                                                                                  :priority 10
                                                                                  :posted-by "x@nonforum.com"
+
                                                                                  :timestamp 80008
                                                                                  :parent nil}]
                                     ;   (POST "/send-message"
@@ -267,58 +280,6 @@
 
 
 
-(def ps
-  ;posts
-  (atom { :posts [{:parent-id 777
-                   :this-id 555
-                   :child-id [444 333 222 8888]}
-                  {:parent-id 334
-                   :this-id 5353
-                   :child-id 225}]}))
-
-;(def posts [{:title "What up Wisconsin!"
-;             :content ""
-;             :comments [{:cid 758373
-;                        :content "How you doing?"
-;                        :comments [{:cid 87583
-;                                   :content "Excellent!"
-;                                   :comments [{:cid 8787
-;                                              :content "Excelsior!"}]}]}]}]);
-
-(defn hax [m]
-  (for [[title contents comments] m]
-    (do
-      (.log js/console (str title " " contents " " comments " "))
-    (list title contents (hax comments)))))
-
-(def m {"P" {"C" {} }
-       "CD" {"DD" {}}
-       "CE" {"EF" {"EG" {"EX" {}}}} })
-                 ;       {:cid 7537
-                 ;       :content "Extremsiour"
-                 ;       :comments {}}})
-         ;   {:title "Superdanger"
-         ;    :content "Ohyeahunoit"
-         ;    :comments {:cid 753753
-         ;               :content ""
-         ;               :comments {:cid 88787
-         ;                          :content "Hurrah!"
-         ;                          :comments {}}}}])
-
-
-(defn nest [m]
-  (for [[k v] m]
-    (do
-      (.log js/console (str k v))
-      (list  [:.padleft k (nest v)]))))
-
-(rum/defc nestit []
-  [:div (nest m)])
-
-
-
-
-
 
 
 (rum/defc input-fields []
@@ -329,14 +290,13 @@
 
 (rum/defc start []
   [:div#maincontain
-   (nestit)
    (top-bar)
    (side-bar)
    (login-bar)
    (television)
    (hello-world)])
 
-(rum/mount (render-item 77)
+(rum/mount (render-item 69)
            (. js/document (getElementById "thread")))
 
 (rum/mount (start)
