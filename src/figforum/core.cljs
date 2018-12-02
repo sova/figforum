@@ -86,35 +86,37 @@
                    :author "vv@nonforum.com"
                    :comments [22]})
 
-(def posts-sleek (atom {77 {:id 77, :contents "Seventy seven is the nicest number below one hundred", :author "nonforum@nonforum.com", :comments [33 53]}, 33 {:id 33, :contents "Thirty three is awesome.", :author "monforum@nonforum.com", :comments [34 35]}, 34 {:id 34, :contents "fusion is coming soon to a powergrid near you.", :author "non@nonforum.com", :comments [37]}, 37 {:id 37, :contents "hello there to the galaxy", :author "x@nonforum.com", :comments []}, 53 {:id 53, :contents "relax , don't do it.", :author "fool@nonforum.com", :comments [88]}, 69 {:id 69, :contents "the extraordinary world of bugs is glorious.", :author "fx@nonforum.com", :comments [77]}, 88 {:id 88, :contents "fortunate are the African penguins", :author "vv@nonforum.com", :comments [22]}, nil {:author "y@nonforum.com", :contents "hail yourself, poseidonnn", :comments [77 78]}}))
-                   ;create painless index from that
-(defn idx-by-id [id-key coll]
-  (into {}
-        (map (fn [{id id-key :as item}]
-               [id item]))
-        coll))
+;create painless index map {:thing} from id
+;(defn idx-by-id [id-key coll]
+;  (into {}
+;        (map (fn [{id id-key :as item}]
+;               [id item]))
+;        coll))
 
-(idx-by-id :id @posts)
-
-
+;(def posts-sleek (atom (idx-by-id :id @posts)))
 
 (defn return-comment-ids [post-id]
   (let [cids (:comments (first (filter  #(= post-id (:id %)) @posts)))]
     cids))
 
+(return-comment-ids 69)
+
+(first (filter #(= 69 (:id %)) @posts))
 
  (rum/defc render-item < rum/reactive [pid]
-  (let [posts  (rum/react posts-sleek) ;atom
+  (let [post-coll  (rum/react posts) ;atom
         cids (return-comment-ids pid)]
     (prn cids)
     (if (empty? (return-comment-ids pid))
-      (let [noc-post (get posts pid)]
+      (let [noc-post  (first (filter  #(= pid (:id %)) post-coll))]
+        (prn "haaaaa")
         [:div.nocomments
          [:div#pid
           [:div.item-contents (:contents noc-post)]
           [:div.item-author   (:author noc-post)]]]))
        ;lest the post has comments and needs more renders in pocket.
-       (let [com-post (get posts pid)]
+       (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
+         (prn "waaaaa")
          [:div.hascomments.padleft
           [:div#pid
            [:div.item-contents  (:contents com-post)]
@@ -124,11 +126,13 @@
 
 
 
-(swap! posts conj {:author "y@nonforum.com"
+
+(swap! posts conj {:id 999
+                   :author "y@nonforum.com"
                    :contents "hail yourself, poseidonnn"
                    :comments [77 78]})
 
-(idx-by-id :id @posts)
+
 
 
 
@@ -245,13 +249,20 @@
                          }]
    [:button.fullwidth {:type "button"
                        :on-click (fn [e]
-                                   (let [new-comment-map {:id 7777
+                                   (let [ parent-id 53
+                                          new-comment-map {:id 888
                                                           :contents (get-in @input-state [:inputs 0 :comment])
-                                                          :posted-by "zed@nonforum.com"}]
+                                                          :author "zededeed@nonforum.com"
+                                                          :comments []}]
                                      (swap! posts conj new-comment-map)
-                                     (reset! posts-sleek (idx-by-id :id @posts))
-                                     (.log js/console new-comment-map)
-                                     (.log js/console "comment added.")
+                                     ;(swap! posts update-in
+                                     ;(reset! posts-sleek (idx-by-id :id @posts))
+                                     ;(swap! posts-sleek update-in [parent-id :comments] conj (:id new-comment-map))
+                                     ;(prn @posts-sleek);add this id as a child element of the parent in the atom
+
+                                     ;(.log js/console @posts-sleek)
+                                     ;(.log js/console new-comment-map)
+                                     ;(.log js/console "comment added.")
 
                                      ;also need to update "child" ness of parent comment
                                      ;(swap! posts update "33" [:comments] conj (:id new-comment-map))
@@ -262,7 +273,8 @@
 
 
 
-
+;(prn @posts-sleek)
+;(swap! posts-sleek update-in [69 :comments] conj 7778)
 
 
 
