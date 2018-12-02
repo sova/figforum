@@ -51,6 +51,7 @@
                           :contents ""
                           :comment "ur coment"
                           :selected-parent 77
+                          :selected-child [33 53]
                           }]}))
 
 (defn js-reload []
@@ -115,8 +116,10 @@
          [:div#pid.padleft {:on-click (fn [e] (do
                                          (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
-                                         (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}
-          [:div.item-contents {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents noc-post)
+                                         (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)
+                                         (swap! input-state assoc-in [:inputs 0 :selected-child] (return-comment-ids pid))))}
+          [:div.item-contents {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
+                                            (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents noc-post)
             [:div.item-author   (:author noc-post)]]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
@@ -124,8 +127,10 @@
           [:div#pid.padleft {:on-click (fn [e] (do
                                          (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
-                                         (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}
-           [:div.item-contents  {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents com-post)
+                                         (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)
+                                         (swap! input-state assoc-in [:inputs 0 :selected-child] (return-comment-ids pid))))}
+           [:div.item-contents  {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
+                                              (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents com-post)
              [:div.item-author (:author com-post)]]
            (map render-item cids)]]))))
 
@@ -252,7 +257,7 @@
                                         (swap! posts conj new-comment-map) ;add new comment
                                         (swap! posts update-in [first-hit :comments] conj (:id new-comment-map))) ;add comment id to parent
                                      (prn posts)
-                                     ))} "post comment"]])
+                                     ))} "Reply to Orange Comment"]])
 
 
 

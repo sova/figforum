@@ -30,6 +30,10 @@
   border: 0px solid red;
 }
 
+.selectedChild {
+  background-color: hsl(250, 50%, 50%, 0.1);
+  border: 0px;
+}
 .fbfb {
   background-color: lightblue;
 }
