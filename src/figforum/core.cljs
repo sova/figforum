@@ -108,42 +108,26 @@
   (let [post-coll  (rum/react posts) ;atom
         input-coll (rum/react input-state)
         cids (return-comment-ids pid)]
-    (prn cids)
+    ;(prn cids)
     (if (empty? (return-comment-ids pid))
       (let [noc-post  (first (filter  #(= pid (:id %)) post-coll))]
-        (prn "haaaaa")
         [:div.nocomments
          [:div#pid {:on-click (fn [e] (do
-                                         (.log js/console pid)
+                                         (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
                                          (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}
           [:div.item-contents {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents noc-post)
             [:div.item-author   (:author noc-post)]]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
-         (prn "waaaaa")
          [:div.hascomments.padleft
           [:div#pid {:on-click (fn [e] (do
-                                         (.log js/console pid)
+                                         (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
                                          (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)))}
            [:div.item-contents  {:class (if (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent")} (:contents com-post)
              [:div.item-author (:author com-post)]]
            (map render-item cids)]]))))
-
-
-(get-in @input-state [:inputs 0 :selected-parent])
-(if (= 77 (get-in @input-state [:inputs 0 :selected-parent])) "hey")
-
-
-(swap! posts conj {:id 999
-                   :author "y@nonforum.com"
-                   :contents "hail yourself, poseidonnn"
-                   :comments [77 78]})
-
-
-
-
 
 
 (rum/defc fb-sdk [app-id]
@@ -248,6 +232,9 @@
 ;; thank you, @tonsky
 ;; rum is awesome. 25 nov 2018
 
+
+(def y (atom 999))
+
 (rum/defc post-comment-input []
   [:form#postcommentinput
    [:textarea.fullwidth {:value (get-in @input-state [:inputs 0 :comment])
@@ -259,7 +246,7 @@
    [:button.fullwidth {:type "button"
                        :on-click (fn [e]
                                    (let [ parent-id (get-in @input-state [:inputs 0 :selected-parent])
-                                          new-comment-map {:id 888
+                                          new-comment-map {:id (swap! y inc)
                                                           :contents (get-in @input-state [:inputs 0 :comment])
                                                           :author "zededeed@nonforum.com"
                                                           :comments []}]
@@ -267,29 +254,11 @@
                                       (let [first-hit (->> @posts
                                                           (keep-indexed #(when (= (:id %2) parent-id) %1))
                                                            first)]
+                                        (.log js/console ">< " (get-in @posts [first-hit :comments]) (:id new-comment-map))
                                         (swap! posts conj new-comment-map) ;add new comment
                                         (swap! posts update-in [first-hit :comments] conj (:id new-comment-map))) ;add comment id to parent
-
-                                     ;(.log js/console @posts-sleek)
-                                     ;(.log js/console new-comment-map)
-                                     ;(.log js/console "comment added.")
-
-                                     ;also need to update "child" ness of parent comment
-                                     ;(swap! posts update "33" [:comments] conj (:id new-comment-map))
-                                     ;how to update ?
+                                     (prn posts)
                                      ))} "post comment"]])
-
-
-
-
-
-;(prn @posts-sleek)
-;(swap! posts-sleek update-in [69 :comments] conj 7778)
-
-
-
-
-
 
 
 
@@ -298,12 +267,6 @@
    [:input.fullwidth {:place-holder "username"}]
    [:input.fullwidth {:place-holder "password" :type "password"}]
    [:button.fullwidth {:type "submit"} "login"]])
-
-
-
-
-
-
 
 (rum/defc input-fields []
   [:div#inputs-contain
