@@ -113,24 +113,24 @@
     ;(prn cids)
     (if (empty? (return-comment-ids pid))
       (let [noc-post  (first (filter  #(= pid (:id %)) post-coll))]
-        [:div.nocomments {:id pid}
+        [:div.nocomments {:id pid :class "genpost"}
          [:div.padleft {:on-click (fn [e] (do
                                          (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
                                          (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)
                                          (swap! input-state assoc-in [:inputs 0 :selected-child] (return-comment-ids pid))))}
-          [:div.item-contents {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
+          [:div.item-contents.genpost {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
                                             (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents noc-post)
             [:div.item-author   (:author noc-post)]]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
-         [:div.hascomments {:id pid}
+         [:div.hascomments {:id pid }
           [:div.padleft {:on-click (fn [e] (do
                                          (.log js/console "Freshly selected: " pid)
                                          (.stopPropagation e)
                                          (swap! input-state assoc-in [:inputs 0 :selected-parent] pid)
                                          (swap! input-state assoc-in [:inputs 0 :selected-child] (return-comment-ids pid))))}
-           [:div.item-contents  {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
+           [:div.item-contents.genpost  {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
                                               (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents com-post)
              [:div.item-author (:author com-post)]]
            (map render-item cids)]]))))
