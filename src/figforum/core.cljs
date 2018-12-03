@@ -106,6 +106,7 @@
 (first (filter #(= 69 (:id %)) @posts))
 
  (rum/defc render-item < rum/reactive [pid]
+
   (let [post-coll  (rum/react posts) ;atom
         input-coll (rum/react input-state)
         cids (return-comment-ids pid)]
@@ -184,7 +185,7 @@
     [:li.gogo [:a {:href "/gogole"} "Google Login"]]
     [:li.twtw [:a {:href "/twitter"} "Twitter Login"]]
     [:li.nfnf [:a {:href "/nflogin"} "Nonforum Login"]]]
-   (fb-sdk 1417763311691300) ;nonforum app id
+   ;(fb-sdk 1417763311691300) ;nonforum app id
    ])
 
 (rum/defc tv-cell [td]
@@ -243,6 +244,7 @@
                                               (.log js/console (get-in @input-state [:inputs 0 :comment]))))
                          }]
    [:button.fullwidth {:type "button"
+                       :class "replySelected"
                        :on-click (fn [e]
                                    (let [ parent-id (get-in @input-state [:inputs 0 :selected-parent])
                                           new-comment-map {:id (swap! y inc)
@@ -257,7 +259,7 @@
                                         (swap! posts conj new-comment-map) ;add new comment
                                         (swap! posts update-in [first-hit :comments] conj (:id new-comment-map))) ;add comment id to parent
                                      (prn posts)
-                                     ))} "Reply to Orange Comment"]])
+                                     ))} "Reply to Plum-highlighted Comment"]])
 
 
 
