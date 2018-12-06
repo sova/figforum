@@ -1,3 +1,58 @@
+
+5 DEC 2018
+
+
+nonprocess: (new post | new comment)
+
+              \\\  goes into a funnel ////
+
+                   \ \ \ \ \ \\   .......vVVVVv>>>>>>>>>>>>> and out comes
+                                                                             tokenized
+                                                                             +++i
+                  :article-id 88
+                  :contents "the declaration of independence"              token-to-thread-index
+
+
+                                                                           "the" [88]
+                                                                           "declaration" [88]
+                                                                           "of" [88]
+                                                                           "independence" [88]
+
+
+                                                                           and yes, these are meant to be
+                                                                           exhaustive indices
+                                                                           even on small words
+                                                                           and we can easily bring in the
+                                                                           Yummly, drakkensearch work
+                                                                           to allow boolean logic on the
+                                                                           keywords, if we so choose
+
+
+
+                          context-specific-ratings
+                          CSRatings
+                          means that for articles, each subtopic is an NF thread.
+ + books
+ + speeches
+ + letters
+[+ topics
+ + articles [listed, context-specifically-ranked subtopics]
+ + questions+discussions]
+
+
+ context-specific ratings!
+
+ means that we need a new way to host each type of topic/article/q+d
+so ... ratings must therefore be context-specific.
+
+
+
+
+
+Autopopulate new submissions with potential entries, label them as such (autopopulated) until they get votes of their own, otherwise they stay kinda muted/gray (autofilled in from other parts of the forum)
+
+
+
 3 DEC 2018
 
 adding authentication is the next step
