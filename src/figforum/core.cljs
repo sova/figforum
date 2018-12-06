@@ -65,7 +65,7 @@
                    {:id 33
                     :contents "Thirty three is awesome."
                     :author "monforum@nonforum.com"
-                    :comments [34 35]}
+                    :comments [34]}
                    {:id 34
                     :contents "fusion is coming soon to a powergrid near you."
                     :author "non@nonforum.com"
@@ -81,12 +81,16 @@
                    {:id 69
                     :contents "the extraordinary world of bugs is glorious."
                     :author "fx@nonforum.com"
-                    :comments [77]}]))
+                    :comments [77]}
+                   {:id 7777
+                    :contents "Oh how I love the rain"
+                    :author "rains@nonforum.com"
+                    :comments []}]))
 
 (swap! posts conj {:id 88
                    :contents "fortunate are the African penguins"
                    :author "vv@nonforum.com"
-                   :comments [22]})
+                   :comments []})
 
 ;create painless index map {:thing} from id
 ;(defn idx-by-id [id-key coll]
@@ -105,7 +109,18 @@
 
 (first (filter #(= 69 (:id %)) @posts))
 
- (rum/defc render-item < rum/reactive [pid]
+
+(def show-fresh
+  {:did-mount (fn [state]
+                (let [comp     (:rum/react-component state)
+                      dom-node (js/ReactDOM.findDOMNode comp)]
+                ;  (set! (.-backgroundColor (.-style dom-node)) "green")
+                 ; (set! (.-transition (.-style dom-node)) "background-color 0.5s ease")
+                  (set! (.-classList dom-node) "justMounted")
+                  )
+                state) })
+
+ (rum/defc render-item < rum/reactive show-fresh [pid]
 
   (let [post-coll  (rum/react posts) ;atom
         input-coll (rum/react input-state)

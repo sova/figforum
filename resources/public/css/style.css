@@ -29,6 +29,12 @@
   border-radius: 5px;
 }
 
+.justMounted {
+    -webkit-animation: fade 0.5s;
+    animation: fade 0.5s;
+    opacity: 1;
+}
+
 
 .genpost {
     padding: 3px;
@@ -78,4 +84,15 @@
 #postcommentinput {
   display: block;
   border: 1px solid lightblue;
+}
+
+
+
+
+@-webkit-keyframes fade {
+    from {opacity: 0}
+    to {opacity: 1}
+}@keyframes fade {
+    from {opacity: 0}
+    to {opacity: 1}
 }
