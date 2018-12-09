@@ -9,6 +9,12 @@
 
 (defonce app-state (atom {:text "Hello world!"}))
 
+(def auth-db (atom [{:username "lopez"
+                    :password "great"}
+                   {:username "vas"
+                    :password "haxor5"}]))
+
+
 
 (defn err0r []
   (println "err0r"))
@@ -40,6 +46,14 @@
                                            :timestamp 564271}]}
 
                         }))
+
+
+(def nf-ratings (atom { 33373 { :rid 33373
+                                :author "jm@nf.com"
+                                :oid "theThingyRated251215"
+                                :rating "++"
+                                :timestamp 121212121212}}))  ;;massive global rating object.  fill it however you choose from the server.  subscriptions.
+
 (def nf-qd (atom { 12345777 {:contents "Hey this is a question about this site.  How does it all work, and what's it all about?"
                              :comments []
                              :author "x@nonforum.com"
@@ -94,6 +108,11 @@
                           :comment "ur coment"
                           :selected-parent 77
                           :selected-child [33 53]
+                          :username ""
+                          :password ""
+                          :create-username ""
+                          :create-password ""
+                          :create-password2 ""
                           }]}))
 
 (defn js-reload []
@@ -151,6 +170,38 @@
 
 (first (filter #(= 69 (:id %)) @posts))
 
+
+
+(defn create-user [username password password2]
+  (if (not (= password password2))
+    (.log js/console "passwords do not match")
+  ;else
+    (if (not (empty? (filter #(= username (:username %)) @auth-db)))
+      (.log js/console "username in use")
+    ;else
+      (do
+        (swap! auth-db conj {:username username :password password})
+        (.log js/console "n<>n user added to db" username)))))
+
+
+
+
+
+(defn try-login [username password]
+  (let [results (filter #(= username (:username %)) @auth-db)
+        stored-pw (:password results)]
+    (if (not (empty? results))
+      "hax"
+      (if (= password stored-pw)
+        "passwords match"))
+    ;else
+      "user not found"))
+
+(try-login "vas" "haxor5")
+
+(filter #(= "vas" (:username %)) @auth-db)
+
+(try-login "vas" "haxor5")
 
 (def show-fresh
   {:did-mount (fn [state]
@@ -300,13 +351,20 @@
                                               (swap! input-state assoc-in [:inputs 0 :comment] (.-value (.-target e)))
                                               (.log js/console (get-in @input-state [:inputs 0 :comment]))))
                          }]
+   [:input.fullwidth {:value (get-in @input-state [:inputs 0 :username])
+                         :place-holder "username"
+                         :on-change (fn [e] (do
+                                              (swap! input-state assoc-in [:inputs 0 :username] (.-value (.-target e)))
+                                              (.log js/console (get-in @input-state [:inputs 0 :username]))))
+                         }]
    [:button.fullwidth {:type "button"
                        :class "replySelected"
                        :on-click (fn [e]
                                    (let [ parent-id (get-in @input-state [:inputs 0 :selected-parent])
+                                          username (get-in @input-state [:inputs 0 :username])
                                           new-comment-map {:id (swap! y inc)
                                                           :contents (get-in @input-state [:inputs 0 :comment])
-                                                          :author "zededeed@nonforum.com"
+                                                          :author username
                                                           :comments []}]
 
                                       (let [first-hit (->> @posts
@@ -320,17 +378,57 @@
 
 
 
+(rum/defc create-account-fields []
+  [:form#nfcreate
+   [:input.fullwidth {:place-holder "username" :name "username"
+                      :on-change (fn [e] (do
+                                              (swap! input-state assoc-in [:inputs 0 :create-username] (.-value (.-target e)))
+                                              (.log js/console (get-in @input-state [:inputs 0 :create-username]))))}]
+   [:input.fullwidth {:place-holder "password" :type "password" :name "password"
+                      :on-change (fn [e] (do
+                                              (swap! input-state assoc-in [:inputs 0 :create-password] (.-value (.-target e)))
+                                              (.log js/console (get-in @input-state [:inputs 0 :create-password]))))}]
+   [:input.fullwidth {:place-holder "pw confirm" :type "password" :name "password2"
+                      :on-change (fn [e] (do
+                                              (swap! input-state assoc-in [:inputs 0 :create-password2] (.-value (.-target e)))
+                                              (.log js/console (get-in @input-state [:inputs 0 :create-password2]))))}]
+   [:button.fullwidth {:type "button"
+                       :on-click (fn [e] (let [username  (get-in @input-state [:inputs 0 :create-username])
+                                               password  (get-in @input-state [:inputs 0 :create-password])
+                                               password2 (get-in @input-state [:inputs 0 :create-password2])]
+                                           (do
+                                             (.log js/console "create account button pressed")
+                                             (create-user username password password2))))} "create account"]])
+
+
+
 (rum/defc nf-login-input []
   [:form#nflogin
-   [:input.fullwidth {:place-holder "username"}]
-   [:input.fullwidth {:place-holder "password" :type "password"}]
-   [:button.fullwidth {:type "submit"} "login"]])
+   [:input.fullwidth {:place-holder "username" :name "username"
+                      :on-change (fn [e] (do
+                                              (swap! input-state assoc-in [:inputs 0 :username] (.-value (.-target e)))
+                                              (.log js/console (get-in @input-state [:inputs 0 :username]))))}]
+   [:input.fullwidth {:place-holder "password" :type "password" :name "password"
+                      :on-change (fn [e] (do
+                                              (swap! input-state assoc-in [:inputs 0 :password] (.-value (.-target e)))
+                                              (.log js/console (get-in @input-state [:inputs 0 :password]))))}]
+   [:button.fullwidth {:type "button"
+                       :on-click (fn [e] (let [username (get-in @input-state [:inputs 0 :username])
+                                               password (get-in @input-state [:inputs 0 :password])]
+                                           (do
+                                             (.log js/console "login button pressed")
+                                             (try-login username password))))} "login"]])
+
+(rum/defc create-account-input []
+  [:div#create-account-contain
+   (create-account-fields)])
 
 (rum/defc input-fields []
   [:div#inputs-contain
    (post-input)
    (post-comment-input)
-   (nf-login-input)])
+   (nf-login-input)
+   (create-account-input)])
 
 (rum/defc start []
   [:div#maincontain

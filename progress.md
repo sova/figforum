@@ -1,3 +1,42 @@
+8.75 DEC
+
+notifications serverside atom
+
+massive
+
+keeps fresh notifications
+
+notifications {uid [{:notify-text "" :timestamp 1245 :status "unread" :ref-thread 1241 :ref-comment 21667}]}
+pop a new notification in here anytime someone replies to a comment
+
+8.5 DEC
+
+massive rating object on the server
+
+serverside subscription atoms
+  subscribed { uid [thread-id thread-id] }
+  subscribed-to { thread-id [uid, uid, uid]}
+
+when a user accesses a thread, filter out the revelant ratings and send over a summary object (rather than every relevant rating?) or send over every relevant rating and then do on-the-fly client math with new ratings easily.
+summary object requires blockchain.
+is nice idea.  will have to play with as time goes on.
+
+for now, gonna keep ratings as discreet items and buckshot them over the wire.
+
+
+
+
+8 DEC 2018
+
+let's add a token!
+that'll be the "login authenticated and you can post stuff" token
+
+so every "post" has a "username" "contents" and in the ring-params we'll have userid as the uid (email)
+and we'll also have, in the ring-params, :next, in case there is a redirect field,
+and we'll also have, in the ring-params, an authentication key that the user supplies
+so the authentication key has to satisfy a token-within-this-timestamp rule
+encoded tokens have the timestamp built in and tagged onto the end.
+
 
 5 DEC 2018
 
