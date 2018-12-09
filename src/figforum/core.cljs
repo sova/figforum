@@ -188,20 +188,27 @@
 
 
 (defn try-login [username password]
-  (let [results (filter #(= username (:username %)) @auth-db)
+  (let [results (first (filter #(= username (:username %)) @auth-db))
         stored-pw (:password results)]
-    (if (not (empty? results))
-      "hax"
-      (if (= password stored-pw)
-        "passwords match"))
+    (if (empty? results)
+      (.log js/console "<user not found")
     ;else
-      "user not found"))
+      (if (= password stored-pw)
+        (.log js/console "passwords match")
+      ;else
+        (.log js/console stored-pw)))))
+
 
 (try-login "vas" "haxor5")
 
 (filter #(= "vas" (:username %)) @auth-db)
 
 (try-login "vas" "haxor5")
+
+(create-user "hap" "5" "5")
+(try-login "hap" "5")
+
+(filter #(= "hap" (:username %)) @auth-db)
 
 (def show-fresh
   {:did-mount (fn [state]
