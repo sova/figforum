@@ -130,35 +130,51 @@
 (def posts (atom [ {:id 77
                     :contents "Seventy seven is the nicest number below one hundred"
                     :author "nonforum@nonforum.com"
+                    :number-of-ratings 2
+                    :ratings-total 98
                     :comments [33 53]}
                    {:id 33
                     :contents "Thirty three is awesome."
                     :author "monforum@nonforum.com"
+                    :number-of-ratings 1
+                    :ratings-total 99
                     :comments [34]}
                    {:id 34
                     :contents "fusion is coming soon to a powergrid near you."
                     :author "non@nonforum.com"
+                    :number-of-ratings 3
+                    :ratings-total 300
                     :comments [37]}
                    {:id 37
                     :contents "hello there to the galaxy"
                     :author "x@nonforum.com"
+                    :number-of-ratings 5
+                    :ratings-total 470
                     :comments []}
                    {:id 53
                     :contents "relax , don't do it."
                     :author "fool@nonforum.com"
+                    :number-of-ratings 3
+                    :ratings-total 270
                     :comments [88 7777]}
                    {:id 69
                     :contents "the extraordinary world of bugs is glorious."
                     :author "fx@nonforum.com"
+                    :number-of-ratings 4
+                    :ratings-total 380
                     :comments [77]}
                    {:id 7777
                     :contents "Oh how I love the rain"
                     :author "rains@nonforum.com"
+                    :number-of-ratings 1
+                    :ratings-total 0
                     :comments []}]))
 
 (swap! posts conj {:id 88
                    :contents "fortunate are the African penguins"
                    :author "vv@nonforum.com"
+                   :number-of-ratings 1
+                   :ratings-total 0
                    :comments []})
 
 (def ratings (atom [{}]))
@@ -250,7 +266,9 @@
                                          (swap! input-state assoc-in [:inputs 0 :selected-child] (return-comment-ids pid))))}
           [:div.item-contents.genpost {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
                                             (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents noc-post)
-            [:div.item-author   (:author noc-post)]]]])
+            [:div.item-author   (:author noc-post)]
+            [:div.rate
+              [:div.item-rating   (/ (:ratings-total noc-post) (:number-of-ratings noc-post))]]]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
          [:div.hascomments {:id pid }
@@ -261,7 +279,12 @@
                                          (swap! input-state assoc-in [:inputs 0 :selected-child] (return-comment-ids pid))))}
            [:div.item-contents.genpost  {:class (cond (= pid (get-in @input-state [:inputs 0 :selected-parent])) "selectedParent"
                                               (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents com-post)
-             [:div.item-author (:author com-post)]]
+             [:div.item-author (:author com-post)]
+             [:div.rate
+              ; [:div.item-rate-doubleplus "++"]
+              ; [:div.item-rate-plus "+"]
+              ; [:div.item-rate-minus "-"]
+               [:div.item-rating   (/ (:ratings-total com-post) (:number-of-ratings com-post))]]]
            (map render-item cids)]]))))
 
 

@@ -15,6 +15,19 @@
   padding-left: +35px;
 }
 
+.rate {
+  width: 30px;
+  height: 30px;
+  border: 1px solid purple;
+  float: right;
+  overflow: hidden;
+}
+
+.item-rating {
+  float: left;
+  font-size: 32px;
+}
+
 .nocomments {
   border: 1px solid #eee;
   border-width: 0px;
