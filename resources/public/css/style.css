@@ -20,12 +20,18 @@
   height: 30px;
   border: 1px solid purple;
   float: right;
+  clear: none;
   overflow: hidden;
 }
 
 .item-rating {
   float: left;
   font-size: 32px;
+}
+
+.item-contents {
+
+
 }
 
 .nocomments {
