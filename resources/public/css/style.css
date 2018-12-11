@@ -13,9 +13,13 @@
 
 .padleft {
   padding-left: +35px;
+
 }
 
 .rate {
+  position: absolute;
+  right: 0;
+  top: 0;
   width: 30px;
   height: 30px;
   border: 1px solid purple;
@@ -24,13 +28,45 @@
   overflow: hidden;
 }
 
+.item-rate-doubleplus {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10px;
+  width: 30px;
+  opacity: 0.5;
+  background-color: green;
+}
+.item-rate-plus {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  height: 10px;
+  width: 30px;
+  opacity: 0.5;
+  background-color: blue;
+}
+.item-rate-minus {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  height: 10px;
+  width: 30px;
+  opacity: 0.5;
+  background-color: pink;
+}
+
+
 .item-rating {
+  position: absolute;
+  top: 0;
+  right: 0;
   float: left;
   font-size: 32px;
 }
 
 .item-contents {
-
+  position: relative;
 
 }
 
