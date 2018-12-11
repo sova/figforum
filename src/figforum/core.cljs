@@ -40,11 +40,14 @@
 (def nf-threads (atom { 12121 { :title "cruise on through to the other side"
                                 :author "jimmorrison@nonforum.com"
                                 :comments []
-                                :ratings [{:oid 5175
-                                           :rater "z@nf.com"
-                                           :rating "+"
-                                           :timestamp 564271}]}
+                                :number-of-ratings 2
+                                :rating-total 98}
 
+                               ; :ratings [{:oid 5175
+                               ;            :rater "z@nf.com"
+                               ;            :rating "+"
+                               ;            :timestamp 564271}]}
+;scrap this ratings idea on the client.. track in on the server.
                         }))
 
 
@@ -58,6 +61,9 @@
                              :comments []
                              :author "x@nonforum.com"
                              :timestamp 80808
+                             :number-of-ratings 32
+                             :rating-total 9700
+
                              :ratings [{:oid 123456
                                         :rater "y@nonforum.com"
                                         :rating "++"
@@ -110,6 +116,8 @@
                           :selected-child [33 53]
                           :username ""
                           :password ""
+                          :token ""
+                          :token-timestamp ""
                           :create-username ""
                           :create-password ""
                           :create-password2 ""
@@ -153,6 +161,8 @@
                    :author "vv@nonforum.com"
                    :comments []})
 
+(def ratings (atom [{}]))
+
 ;create painless index map {:thing} from id
 ;(defn idx-by-id [id-key coll]
 ;  (into {}
@@ -194,7 +204,11 @@
       (.log js/console "<user not found")
     ;else
       (if (= password stored-pw)
-        (.log js/console "passwords match")
+        (do
+          (.log js/console "passwords match")
+          (.log js/console "generating login token")
+          (swap! input-state assoc-in [:inputs 0 :token] "hash-this--shiz")
+          (swap! input-state assoc-in [:inputs 0 :username] username))
       ;else
         (.log js/console stored-pw)))))
 
