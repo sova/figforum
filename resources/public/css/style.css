@@ -1,10 +1,59 @@
 /* some style */
 
-#tv { border: 1px solid gray;}
+#tv { border: 1px solid gray;
+      float: left;
+      clear: left;
+      display: block;}
 .heading {
   font-size: 26px;
   color: hsl(180, 90%, 20%);
 }
+.topbar {
+  font-size: 25px;
+  height: 40px;
+  background-color:
+  margin-top: 0px;
+  margin-left: 0;
+  background-color: #eee;
+}
+
+.topbar>li { list-style-type: none; float: left; margin-left: 40px; width: 100px; height: 40px;
+             border: 1px solid #ccc;}
+
+.topbar>li>a:hover { color: hsla(240, 50%, 30%, 1.0); }
+.topbar>li>a:link {color: hsla(240, 50%, 30%, 1.0);}
+
+
+.sidebar {
+  border: 1px solid green;
+  display: block;
+  height: 300px;
+  width: 250px;
+  padding: 0;
+  background-color: #eee;
+}
+.sidebar>li {
+  float: left;
+  clear: left;
+  height: 45px;
+  width: 249px;
+  font-size: 35px;
+  background-color: #ccc;
+  border: 1px solid white;
+  border-width: 1px 0 1px 1px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#loginbar {
+  height: 250px;
+  border: 1px solid blue;
+}
+#loginbar>ol>li {
+  float: left;
+  clear: left;}
+
 .fullwidth {
   width: 100%;
   float: left;
@@ -72,9 +121,17 @@
 }
 
 .item-contents {
+  clear: left;
   position: relative;
   z-index: 100;
+  display: block;
+  min-height: 35px;
 
+}
+
+.item-author {
+  clear: left;
+  display: block;
 }
 
 .nocomments {
@@ -148,7 +205,10 @@
   border: 1px solid lightblue;
 }
 
-
+#maincontain {
+  float: left;
+  clear: left;
+}
 
 
 @-webkit-keyframes fade {
