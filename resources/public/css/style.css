@@ -10,11 +10,12 @@
 }
 .topbar {
   font-size: 25px;
-  height: 40px;
+  height: auto;
   background-color:
   margin-top: 0px;
   margin-left: 0;
   background-color: #eee;
+  display: block;
 }
 
 .topbar>li { list-style-type: none; float: left; margin-left: 40px; width: 100px; height: 40px;
