@@ -447,7 +447,7 @@
     (map tv-cell (:tiles (rum/react tv-state)))]])
 
 (rum/defc post-input []
-  [:form#postinput
+  [:form#postinput "Create new post"
    [:input.fullwidth {:place-holder "title"
                       :on-change (fn [e] (do
                                     (swap! input-state assoc-in [:inputs 0 :title] (.-value (.-target e)))
@@ -521,15 +521,14 @@
 
 (rum/defc input-fields []
   [:div#inputs-contain
-   (post-input)
-   (post-comment-input)
-   (create-account-input)])
+   (post-comment-input)])
 
 (rum/defc start []
   [:div#maincontain
    (top-bar)
    (side-bar)
    (login-bar)
+   (post-input)
    (television)])
 
 (rum/mount (render-item 69)
