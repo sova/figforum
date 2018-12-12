@@ -26,6 +26,8 @@
   float: right;
   clear: none;
   overflow: hidden;
+  margin-right: 4px;
+  margin-top: 6px;
 }
 
 .item-rate-doubleplus {

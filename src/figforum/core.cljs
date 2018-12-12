@@ -154,8 +154,8 @@
                    {:id 53
                     :contents "relax , don't do it."
                     :author "fool@nonforum.com"
-                    :number-of-ratings 3
-                    :ratings-total 270
+                    :number-of-ratings 70
+                    :ratings-total 6900
                     :comments [88 7777]}
                    {:id 69
                     :contents "the extraordinary world of bugs is glorious."
@@ -166,15 +166,15 @@
                    {:id 7777
                     :contents "Oh how I love the rain"
                     :author "rains@nonforum.com"
-                    :number-of-ratings 1
-                    :ratings-total 0
+                    :number-of-ratings 2
+                    :ratings-total 190
                     :comments []}]))
 
 (swap! posts conj {:id 88
                    :contents "fortunate are the African penguins"
                    :author "vv@nonforum.com"
-                   :number-of-ratings 1
-                   :ratings-total 0
+                   :number-of-ratings 2
+                   :ratings-total 184
                    :comments []})
 
 (def ratings (atom [{}]))
@@ -188,14 +188,44 @@
 
 ;(def posts-sleek (atom (idx-by-id :id @posts)))
 
+(defn get-post-by-id [post-id]
+  (let [post (first (filter #(= post-id (:id %)) @posts))]
+    post))
+
+(get-post-by-id 77)
+
+
+(first (first (filter #(= (:id (second %)) 88) (map-indexed vector @posts))))
+
+(defn sort-the-comments-of! [post-id]
+  (let [sort-me-id post-id
+        spot  (first (first (filter #(= (:id (second %)) sort-me-id) (map-indexed vector @posts))))
+        sorted-comments  (map :id
+                         (sort-by :number-of-ratings >
+                           (map get-post-by-id
+                             (:comments (get-post-by-id sort-me-id)))))]
+      (swap! posts assoc-in [spot :comments] sorted-comments )))
+
 (defn return-comment-ids [post-id]
-  (let [cids (:comments (first (filter  #(= post-id (:id %)) @posts)))]
-    cids))
+  (let [cids (:comments (first (filter  #(= post-id (:id %)) @posts)))
+        posts (map get-post-by-id cids)
+        post-collection (sort-by #(/ (:ratings-total %) (:number-of-ratings %)) posts)
+        spc  (map :id post-collection)]
+
+    spc))
+
+(return-comment-ids 34)
+(return-comment-ids 53)
 
 (return-comment-ids 69)
+(return-comment-ids 77)
 
 (first (filter #(= 69 (:id %)) @posts))
 
+
+
+(map :id @posts)
+(map sort-the-comments-of! (map :id @posts))
 
 
 (defn create-user [username password password2]
@@ -240,6 +270,8 @@
 
 (filter #(= "hap" (:username %)) @auth-db)
 
+(sort-by :number-of-ratings > @posts)
+
 (def show-fresh
   {:did-mount (fn [state]
                 (let [comp     (:rum/react-component state)
@@ -252,7 +284,7 @@
 
  (rum/defc render-item < rum/reactive show-fresh [pid]
 
-  (let [post-coll  (rum/react posts) ;atom
+  (let [post-coll   (rum/react posts) ;atom
         input-coll (rum/react input-state)
         cids (return-comment-ids pid)]
     ;(prn cids)
@@ -273,7 +305,7 @@
               [:div.item-rate-minus "-"]
               [:div.item-rating   (/ (:ratings-total noc-post) (:number-of-ratings noc-post))]]]]])
        ;lest the post has comments and needs more renders in pocket.
-       (let [com-post (first (filter  #(= pid (:id %)) post-coll))]
+       (let [com-post (first (filter  #(= pid (:id %)) (sort-by #(/ (:ratings-total %) (:number-of-ratings %))  post-coll)))]
          [:div.hascomments {:id pid }
           [:div.padleft {:on-click (fn [e] (do
                                          (.log js/console "Freshly selected: " pid)
