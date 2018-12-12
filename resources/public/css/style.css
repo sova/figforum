@@ -1,5 +1,13 @@
 /* some style */
 
+@import url('https://fonts.googleapis.com/css?family=Assistant:300');
+
+
+* { font-family: 'Assistant', sans-serif;}
+
+a:hover { color: #fff; }
+
+a { transition: color 0.5s ease;}
 #tv { border: 1px solid gray;
       float: left;
       clear: left;
@@ -11,21 +19,20 @@
 .topbar {
   font-size: 25px;
   min-height: 40px;
-  background-color:
-  margin-top: 0px;
+  margin-top: 0;
   margin-left: 0;
-  background-color: hsla(240, 50%, 30%, 1.0);
+  background-color: hsla(240, 50%, 77%, 1.0);
   color: #fff;
   display: inline-block;
   width: 100%;
 }
 
-.topbar>li {  display: inline-block; margin-right: 25px;
-             border: 1px solid #ccc;}
+.topbar>li {  display: inline-block; margin-right: 25px; }
 
-.topbar>li>a:hover { color: hsla(240, 50%, 100%, 1.0); }
-.topbar>li>a:link {color: hsla(240, 50%, 85%, 1.0);}
+
+.topbar>li>a {color: hsla(240, 50%, 85%, 1.0); text-decoration: none;}
 .topbar>li>a:visited {color: hsla(240, 90%, 67%, 1.0);}
+.topbar>li>a:hover { color: #fff; }
 
 
 .sidebar {
@@ -54,15 +61,23 @@
 }
 
 #loginbar {
-  height: 250px;
+  height: 270px;
   border: 1px solid blue;
-  width: 250px;
+  width: 400px;
   float: left;
   display: block;
 }
 #loginbar>ol>li {
   float: left;
   clear: left;}
+
+#footer {
+  margin: auto;
+  margin-bottom: 1em;
+  float: left;
+  clear: left;
+  background-color: hsla(210, 50%, 50%, 0.1);}
+
 
 .fullwidth {
   width: 100%;
@@ -238,3 +253,5 @@
     from {opacity: 0}
     to {opacity: 1}
 }
+
+

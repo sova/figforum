@@ -516,7 +516,15 @@
                                      ))} "Reply to Plum-highlighted Comment"]])
 
 
-
+(rum/defc footer []
+  [:div#footer "Welcome to nonforum.  Here you will find real-time threads and discussion boards."
+    [:div#foot1 "Nonforum is a place to start discussion threads based on questions or simply on a topic."]
+    [:div#foot2 "Nonforum is also a place where you can share links and discuss them, voting contributions up or down."]
+    [:div#foot3 "When you are logged in you can vote on entries with votes signifying double-plus (++), plus (+), and minus (-)"]
+    [:div#foot4 "The more you participate, the greater your community trust rating."]
+    [:div#foot5 "By providing insightful comments and furthering discussions, your community rating will increase."]
+    [:div#foot6 "There are several media-types at nonforum: Articles, Topics, Questions+Discussions, as well as Books and Speeches."]
+    [:div#foot7 "For complete information on how to use nonforum most effectively, please check out the "[:a {:href "/faq"} "F.A.Q"]]])
 
 
 (rum/defc input-fields []
@@ -539,6 +547,9 @@
 
 (rum/mount (input-fields)
            (. js/document (getElementById "inputs")))
+
+(rum/mount (footer)
+           (. js/document (getElementById "footing")))
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
