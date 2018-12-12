@@ -28,6 +28,7 @@
   overflow: hidden;
   margin-right: 4px;
   margin-top: 6px;
+  z-index: 108;
 }
 
 .item-rate-doubleplus {
@@ -38,6 +39,7 @@
   width: 30px;
   opacity: 0.5;
   background-color: green;
+  z-index: 109;
 }
 .item-rate-plus {
   position: absolute;
@@ -47,6 +49,7 @@
   width: 30px;
   opacity: 0.5;
   background-color: blue;
+  z-index: 109;
 }
 .item-rate-minus {
   position: absolute;
@@ -56,6 +59,7 @@
   width: 30px;
   opacity: 0.5;
   background-color: pink;
+  z-index: 109;
 }
 
 
@@ -69,6 +73,7 @@
 
 .item-contents {
   position: relative;
+  z-index: 100;
 
 }
 

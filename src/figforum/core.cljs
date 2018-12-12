@@ -270,7 +270,18 @@
 
 (filter #(= "hap" (:username %)) @auth-db)
 
-(sort-by :number-of-ratings > @posts)
+;(sort-by :number-of-ratings > @posts)
+
+
+(defn rate [rating pid]
+  (cond
+    (= rating :double-plus) (.log js/console "user rated " pid " ++")
+    (= rating :plus) (.log js/console (str "user rated " pid " +"))
+    (= rating :minus) (.log js/console "user rated " pid " -")))
+
+(rate :plus 533)
+
+
 
 (def show-fresh
   {:did-mount (fn [state]
@@ -300,9 +311,9 @@
                                             (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents noc-post)
             [:div.item-author   (:author noc-post)]
             [:div.rate
-              [:div.item-rate-doubleplus "++"]
-              [:div.item-rate-plus "+"]
-              [:div.item-rate-minus "-"]
+               [:div.item-rate-doubleplus {:on-click (fn [e] (rate :double-plus pid))} "++"]
+               [:div.item-rate-plus  {:on-click (fn [e] (rate :plus pid))} "+"]
+               [:div.item-rate-minus {:on-click (fn [e] (rate :minus pid))} "-"]
               [:div.item-rating   (/ (:ratings-total noc-post) (:number-of-ratings noc-post))]]]]])
        ;lest the post has comments and needs more renders in pocket.
        (let [com-post (first (filter  #(= pid (:id %)) (sort-by #(/ (:ratings-total %) (:number-of-ratings %))  post-coll)))]
@@ -316,9 +327,9 @@
                                               (some #(= % pid) (get-in @input-state [:inputs 0 :selected-child])) "selectedChild")} (:contents com-post)
              [:div.item-author (:author com-post)]
              [:div.rate
-               [:div.item-rate-doubleplus "++"]
-               [:div.item-rate-plus "+"]
-               [:div.item-rate-minus "-"]
+               [:div.item-rate-doubleplus {:on-click (fn [e] (rate :double-plus pid))} "++"]
+               [:div.item-rate-plus  {:on-click (fn [e] (rate :plus pid))} "+"]
+               [:div.item-rate-minus {:on-click (fn [e] (rate :minus pid))} "-"]
                [:div.item-rating   (/ (:ratings-total com-post) (:number-of-ratings com-post))]]]
            (map render-item cids)]]))))
 
