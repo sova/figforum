@@ -10,32 +10,38 @@
 }
 .topbar {
   font-size: 25px;
-  height: auto;
+  min-height: 40px;
   background-color:
   margin-top: 0px;
   margin-left: 0;
-  background-color: #eee;
-  display: block;
+  background-color: hsla(240, 50%, 30%, 1.0);
+  color: #fff;
+  display: inline-block;
+  width: 100%;
 }
 
-.topbar>li { list-style-type: none; float: left; margin-left: 40px; width: 100px; height: 40px;
+.topbar>li {  display: inline-block; margin-right: 25px;
              border: 1px solid #ccc;}
 
-.topbar>li>a:hover { color: hsla(240, 50%, 30%, 1.0); }
-.topbar>li>a:link {color: hsla(240, 50%, 30%, 1.0);}
+.topbar>li>a:hover { color: hsla(240, 50%, 100%, 1.0); }
+.topbar>li>a:link {color: hsla(240, 50%, 85%, 1.0);}
+.topbar>li>a:visited {color: hsla(240, 90%, 67%, 1.0);}
 
 
 .sidebar {
   border: 1px solid green;
+  float: left;
+  clear: left;
   display: block;
   height: 300px;
   width: 250px;
   padding: 0;
   background-color: #eee;
+  margin-right: 25px;
 }
 .sidebar>li {
   float: left;
-  clear: left;
+  clear: none;
   height: 45px;
   width: 249px;
   font-size: 35px;
@@ -50,6 +56,9 @@
 #loginbar {
   height: 250px;
   border: 1px solid blue;
+  width: 250px;
+  float: left;
+  display: block;
 }
 #loginbar>ol>li {
   float: left;
@@ -200,9 +209,13 @@
 #postinput {
   float: left;
   clear: left;
-
+  width: 100%;
   border: 1px solid orange;
   display: block;
+}
+
+#postinput>input {
+  width: 98%;
 }
 
 #postcommentinput {
