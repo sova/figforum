@@ -126,6 +126,7 @@
   z-index: 100;
   display: block;
   min-height: 35px;
+  margin-right: 35px; /*accomodate rating*/
 
 }
 
