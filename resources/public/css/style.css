@@ -97,9 +97,9 @@
   height: 10px;
   width: 30px;
   opacity: 0.5;
-  background-color: green;
   z-index: 109;
 }
+.item-rate-doubleplus:hover { background-color: green;}
 .item-rate-plus {
   position: absolute;
   top: 10px;
@@ -107,9 +107,10 @@
   height: 10px;
   width: 30px;
   opacity: 0.5;
-  background-color: blue;
+
   z-index: 109;
 }
+.item-rate-plus:hover {  background-color: blue;}
 .item-rate-minus {
   position: absolute;
   top: 20px;
@@ -117,9 +118,10 @@
   height: 10px;
   width: 30px;
   opacity: 0.5;
-  background-color: pink;
+
   z-index: 109;
 }
+.item-rate-minus:hover {  background-color: pink;}
 
 
 .item-rating {
