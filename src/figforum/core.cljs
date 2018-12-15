@@ -1,5 +1,5 @@
 (ns figforum.core
-    (:require [rum.core :as rum]))
+  (:require [rum.core :as rum]))
 
 (enable-console-print!)
 
@@ -8,6 +8,10 @@
 ;; define your app data so that it doesn't get over-written on reload
 
 (defonce app-state (atom {:text "Hello world!"}))
+
+
+
+
 
 (def auth-db (atom [{:username "lopez"
                     :password "great"}
@@ -86,6 +90,7 @@
                            :contents "Horne Technologies has developed a working Plasma Containment Prototype for furthering Fusion"
                            :priority 1
                            :posted-by "v@nonforum.com"
+                           :comments [69]
                            :timestamp 808080808
                            :parent nil}
                           {:title "Let's Put Sun Panels on the Roof"
@@ -427,7 +432,7 @@
 (rum/defc login-bar []
   [:div#loginbar
    [:ol.loginbar
-    [:li.fbfb [:a {:href "/facebook"} "Continue with Facebook as ___"]]
+    [:li.fbfb [:a {:href "/facebook"} "Continue with Facebook as Vaso Veneliciukuosoeus"]]
     [:li.gogo [:a {:href "/gogole"} "Google Login"]]
     [:li.twtw [:a {:href "/twitter"} "Twitter Login"]]
     [:li.nfnf "Nonforum Login:" (nf-login-input)]
