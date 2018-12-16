@@ -46,7 +46,7 @@
 (def input-state (atom {:inputs
                        [ {:title ""
                           :contents ""
-                          :comment "ur coment"
+                          :comment "Place your reply to the plum-shaded comment here."
                           :selected-parent 77
                           :selected-child [33 53]
                           :username ""
@@ -280,8 +280,8 @@
 
            [:button.commentog {:on-click (fn [_] (swap! local-atom #(* -1 %)))}
               (if (= @local-atom -1)
-                "hide comments"
-                "show comments")]
+                "hide" ;hide comments
+                "show")] ;show comments
            (if (= @local-atom -1)
              (map render-item cids))]]))))
 

@@ -23,7 +23,7 @@ a { transition: color 0.5s ease;}
   margin-top: 0;
   margin-left: 0;
   background-color: hsla(240, 50%, 77%, 1.0);
-  color: #fff;
+  color: #000;
   display: inline-block;
   width: 100%;
   border-radius: 3px;
@@ -32,7 +32,7 @@ a { transition: color 0.5s ease;}
 .topbar>li {  display: inline-block; margin-right: 5%; }
 
 
-.topbar>li>a {color: hsla(240, 50%, 85%, 1.0); text-decoration: none;}
+.topbar>li>a {color: hsla(240, 50%, 35%, 1.0); text-decoration: none;}
 .topbar>li>a:visited {color: hsla(240, 90%, 67%, 1.0);}
 .topbar>li>a:hover { color: #fff; }
 
@@ -250,13 +250,14 @@ width: 100%;}
   clear: left;
 }
 
-
-.hidecomments {
-  height: 10px;
-  background-color: green;
+.commentog {
+  font-size: .5em;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  background-color: #bbb;
+  border-radius: .5em;
 }
-
-
 
 
 @-webkit-keyframes fade {
