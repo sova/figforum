@@ -251,6 +251,14 @@ width: 100%;}
 }
 
 
+.hidecomments {
+  height: 10px;
+  background-color: green;
+}
+
+
+
+
 @-webkit-keyframes fade {
     from {opacity: 0}
     to {opacity: 1}

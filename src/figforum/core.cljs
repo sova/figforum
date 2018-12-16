@@ -236,11 +236,14 @@
                   )
                 state) })
 
- (rum/defc render-item < rum/reactive show-fresh [pid]
+ (rum/defcs render-item < rum/reactive
+                         (rum/local -1 ::hidecomments)
+                         show-fresh [state pid]
 
   (let [post-coll   (rum/react posts) ;atom
         input-coll (rum/react input-state)
-        cids (return-comment-ids pid)]
+        cids (return-comment-ids pid)
+        local-atom (::hidecomments state)]
     ;(prn cids)
     (if (empty? (return-comment-ids pid))
       (let [noc-post  (first (filter  #(= pid (:id %)) post-coll))]
@@ -274,7 +277,13 @@
                [:div.item-rate-plus  {:on-click (fn [e] (rate :plus pid))} "+"]
                [:div.item-rate-minus {:on-click (fn [e] (rate :minus pid))} "-"]
                [:div.item-rating   (/ (:ratings-total com-post) (:number-of-ratings com-post))]]]
-           (map render-item cids)]]))))
+
+           [:button.commentog {:on-click (fn [_] (swap! local-atom #(* -1 %)))}
+              (if (= @local-atom -1)
+                "hide comments"
+                "show comments")]
+           (if (= @local-atom -1)
+             (map render-item cids))]]))))
 
 
 
