@@ -211,18 +211,6 @@
         (.log js/console stored-pw)))))
 
 
-(try-login "vas" "haxor5")
-
-(filter #(= "vas" (:username %)) @auth-db)
-
-(try-login "vas" "haxor5")
-
-(create-user "hap" "5" "5")
-(try-login "hap" "5")
-
-(filter #(= "hap" (:username %)) @auth-db)
-
-;(sort-by :number-of-ratings > @posts)
 
 
 (defn rate [rating pid]
@@ -350,25 +338,34 @@
   [:div#topbar
    [:ol.topbar
     [:li [:a {:href "/"} "nonforum"]]
+    [:li [:span {:on-click
+                 (fn [e] (do
+                           (.stopPropagation e)
+                           (swap! input-state update-in [:inputs 0 :show-sidebar] not)))} "sidebar"]]
     [:li (link "top")]
-    [:li (link "latest")]
+    ;[:li (link "latest")]
     [:li (link "submit")]
-    [:li (link "feed")]]])
+    ;[:li (link "feed")]
+    [:li [:span {
+              :on-click (fn [e] (do
+                                  (.stopPropagation e)
+                                  (swap! input-state assoc-in [:inputs 0 :logged-in] false)))
+          } "logout"]]]])
 
 (rum/defc side-bar []
   [:div#sidebar
    [:ol.sidebar
     [:li (link "profile")]
-    [:li (link  "settings & pls omg no moar hax")]
-    [:li (link "feedback & hax")]
-    [:li (link "logout")]]])
+    [:li (link "settings")]
+    [:li (link "give feedback")]
+    ]])
 
 (rum/defc login-bar []
   [:div#loginbar
    [:ol.loginbar
-    [:li.fbfb [:a {:href "/facebook"} "Continue with Facebook as Vaso Veneliciukuosoeus"]]
-    [:li.gogo [:a {:href "/gogole"} "Google Login"]]
-    [:li.twtw [:a {:href "/twitter"} "Twitter Login"]]
+    ;[:li.fbfb [:a {:href "/facebook"} "Continue with Facebook as Vaso Veneliciukuosoeus"]]
+    ;[:li.gogo [:a {:href "/gogole"} "Google Login"]]
+    ;[:li.twtw [:a {:href "/twitter"} "Twitter Login"]]
     [:li.nfnf "Nonforum Login:" (nf-login-input)]
     [:li.nfca "Create a Nonforum account:" (create-account-input)]]]
    ;(fb-sdk 1417763311691300) ;nonforum app id
@@ -480,6 +477,17 @@
     [:div#foot7 "For complete information on how to use nonforum most effectively, please check out the "[:a {:href "/faq"} "F.A.Q"]]])
 
 
+(rum/defc non-buzz-placeholder []
+  [:div.nonbuzz "nonforum"])
+
+(rum/defc go-back-button []
+  (let [active-state "all"]
+    [:div.goback {:on-click (fn [e]
+                              (do
+                                (.stopPropagation e)
+                                (swap! input-state assoc-in [:inputs 0 :tv-current] "")))}
+                                  "back to " active-state ]))
+
 (rum/defc input-fields []
   [:div#inputs-contain
    (post-comment-input)])
@@ -487,25 +495,41 @@
 (rum/defc start < rum/reactive []
   (let [logged-in (get-in (rum/react input-state) [:inputs 0 :logged-in])
         tv-current (get-in (rum/react input-state) [:inputs 0 :tv-current])
-        curr-comments (get-in (rum/react input-state) [:inputs 0 :tv-comments])]
+        curr-comments (get-in (rum/react input-state) [:inputs 0 :tv-comments])
+        show-sidebar (get-in (rum/react input-state) [:inputs 0 :show-sidebar])
+        curr-view (get-in (rum/react input-state) [:inputs 0 :current-view])]
     (.log js/console "curr comments " curr-comments)
   [:div#maincontain
-   (top-bar)
-   (side-bar)
+   (if (= false logged-in)
+     (non-buzz-placeholder))
    (if (= false logged-in)
      (login-bar))
+
+
+
    (if (= true logged-in)
-     (post-input))
+     (top-bar))
+   (if (= true show-sidebar)
+     (if (= true logged-in)
+       (side-bar)))
    (if (= true logged-in)
-     (television))
+     (if (not (empty? tv-current))
+       (go-back-button)))
+
+   (if  (empty? tv-current)
+    (if (= true logged-in)
+     (television)))
+
    ;active tv-cell
    (if (= true logged-in)
      (tv-cell tv-current))
+
    ;comments (rendered recursively)
    (if (= true logged-in)
      (map render-item curr-comments))
    (if (= true logged-in)
-     (input-fields))]))
+     (input-fields))
+   ]))
 
 (rum/mount (start)
            (. js/document (getElementById "start")))

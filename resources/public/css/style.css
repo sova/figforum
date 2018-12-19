@@ -47,8 +47,6 @@ a { transition: color 0.5s ease;}
   padding: 0;
   background-color: #eee;
   margin-right: 25px;
-
-  display: none; /*hidden until user logged in*/
 }
 .sidebar>li {
   float: left;
@@ -216,7 +214,7 @@ width: 100%;}
   background-color: pink;
 }
 .tile {
-  width: auto;
+  width: 100%;
   height: auto;
   max-height: 180px;
   font-size: 22px;
@@ -233,7 +231,6 @@ width: 100%;}
   clear: left;
   width: 100%;
   border: 1px solid orange;
-  display: none; /*hidden until user logged in*/
 }
 
 #postinput>input {
@@ -259,6 +256,16 @@ width: 100%;}
   border-radius: .5em;
 }
 
+.nonbuzz {
+  font-size: 72px;
+  color: hsla(270, 50%, 50%, 1);
+}
+
+.goback {
+  background-color: gray;
+  color: white;
+  border: 2px solid purple;
+}
 
 @-webkit-keyframes fade {
     from {opacity: 0}

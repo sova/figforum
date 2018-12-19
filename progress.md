@@ -1,3 +1,13 @@
+18 DEC
+
+add something called :selected-thread
+
+in addition to :selected-child and :selected-parent
+
+then do linkage and rendering on the serverside...
+but also have cljs links on the client for speediness...
+let's see how it goes!
+
 15 DEC
 
 Generate all the tv-tiles, or just one and its comments.
