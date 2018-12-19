@@ -14,9 +14,8 @@
                    {:username "vas"
                     :password "haxor5"}]))
 
-(def     tv-state (atom
-                    {:tiles
-                        [ {:title "Fusion Power Imminent"
+(def     tiles (atom
+                    [{:title "Fusion Power Imminent"
                            :contents "Horne Technologies has developed a working Plasma Containment Prototype for furthering Fusion"
                            :priority 1
                            :posted-by "v@nonforum.com"
@@ -28,20 +27,23 @@
                            :priority 2
                            :posted-by "v@nonforum.com"
                            :timestamp 808080808
+                             :comments []
                            :parent nil}
                           {:title "Tonsky/rum is excellent for cljs"
                            :contents "the best way to be the best"
                            :priority 3
                            :posted-by "v@nonforum.com"
                            :timestamp 808080808
+                           :comments []
                            :parent nil}
                           {:title "Postpostpost"
                            :contents "this is the post!"
                            :link "http://hysterical.com"
                            :priority 4
                            :posted-by "v@nonforum.com"
+                           :comments []
                            :timestamp 808080808
-                           :parent nil}]}))
+                           :parent nil}]))
 
 (def input-state (atom {:inputs
                        [ {:title ""
@@ -62,8 +64,9 @@
                           :tv-priority 4
                           :tv-posted-by ""
                           :tv-timestamp 808
-                          :tv-comments []
+                          :tv-comments [69]
                           :tv-current {}
+                          :logged-in false
                           }]}))
 
 (defn js-reload []
@@ -121,6 +124,11 @@
                    :comments []})
 
 (def ratings (atom [{}]))
+
+
+(map-indexed vector @tiles)
+
+;(map-indexed vector @tiles)
 
 ;create painless index map {:thing} from id
 ;(defn idx-by-id [id-key coll]
@@ -196,6 +204,7 @@
         (do
           (.log js/console "passwords match")
           (.log js/console "generating login token")
+          (swap! input-state assoc-in [:inputs 0 :logged-in] true)
           (swap! input-state assoc-in [:inputs 0 :token] "hash-this--shiz")
           (swap! input-state assoc-in [:inputs 0 :username] username))
       ;else
@@ -368,6 +377,7 @@
 (rum/defc tv-cell [td]
   (let [title (:title td)
         contents (:contents td)
+        comments (:comments td)
         id (:priority td)
         posted-by (:posted-by td)
         timestamp (:timestamp td)]
@@ -377,6 +387,7 @@
                                          (swap! input-state assoc-in [:inputs 0 :tv-contents] contents)
                                          (swap! input-state assoc-in [:inputs 0 :tv-posted-by] posted-by)
                                          (swap! input-state assoc-in [:inputs 0 :tv-timestamp] timestamp)
+                                         (swap! input-state assoc-in [:inputs 0 :tv-comments] comments)
                                          (swap! input-state assoc-in [:inputs 0 :tv-current] td)))
                      :id (str "tile" id)}
         [:div.heading title]
@@ -386,7 +397,7 @@
 (rum/defc television  < rum/reactive []
   [:div#tv
    [:ol.tv
-    (map tv-cell (:tiles (rum/react tv-state)))]])
+    (map tv-cell (rum/react tiles))]])
 
 (rum/defc post-input []
   [:form#postinput "Create new post"
@@ -414,7 +425,7 @@
                                                         :timestamp 80008
                                                         :parent nil}]
 
-                                       (swap! tv-state update :tiles conj new-post-map))) ;thanks @Marc O'Morain
+                                       (swap! tiles conj new-post-map))) ;thanks @Marc O'Morain
                        } "post new"]])
 
 ;; https://github.com/tonsky/grumpy/blob/master/src/grumpy/editor.cljc#L257
@@ -474,22 +485,30 @@
    (post-comment-input)])
 
 (rum/defc start < rum/reactive []
+  (let [logged-in (get-in (rum/react input-state) [:inputs 0 :logged-in])
+        tv-current (get-in (rum/react input-state) [:inputs 0 :tv-current])
+        curr-comments (get-in (rum/react input-state) [:inputs 0 :tv-comments])]
+    (.log js/console "curr comments " curr-comments)
   [:div#maincontain
    (top-bar)
    (side-bar)
-   (login-bar)
-   (post-input)
-   (television)
-   (tv-cell (get-in (rum/react input-state) [:inputs 0 :tv-current]))])
-
-(rum/mount (render-item 69)
-           (. js/document (getElementById "thread")))
+   (if (= false logged-in)
+     (login-bar))
+   (if (= true logged-in)
+     (post-input))
+   (if (= true logged-in)
+     (television))
+   ;active tv-cell
+   (if (= true logged-in)
+     (tv-cell tv-current))
+   ;comments (rendered recursively)
+   (if (= true logged-in)
+     (map render-item curr-comments))
+   (if (= true logged-in)
+     (input-fields))]))
 
 (rum/mount (start)
            (. js/document (getElementById "start")))
-
-(rum/mount (input-fields)
-           (. js/document (getElementById "inputs")))
 
 (rum/mount (footer)
            (. js/document (getElementById "footing")))
